@@ -57,15 +57,15 @@ function App() {
 
         <Map />
 
-        <Card className="app__right">
-          <CardContent>
-          <h3>Live Cases by Country</h3>
-            {/* Table */}
-            <h3>Worldwide new Cases</h3>
-            {/* Graph */}
-          </CardContent>
-        </Card>
       </div>
+      <Card className="app__right">
+      <CardContent>
+      <h3>Live Cases by Country</h3>
+      {/* Table */}
+      <h3>Worldwide new Cases</h3>
+      {/* Graph */}
+      </CardContent>
+      </Card>
     </div>
   );
 }
