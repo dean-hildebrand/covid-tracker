@@ -12,3 +12,6 @@ export const sortData = (data) => {
   });
   return sortedData;
 };
+
+//one liner
+//return sortedData.sort(a,b) => (a.case > b.cases ? -1 : 1)
