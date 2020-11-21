@@ -47,7 +47,7 @@ const options = {
   },
 };
 
-function LineGraph() {
+function LineGraph({ casesType = "cases"}) {
   const [data, setData] = useState({});
 
   //changing the chart data to match chartjs format to be able to display on app
@@ -70,26 +70,33 @@ function LineGraph() {
   };
 
   useEffect(() => {
-    fetch("https://disease.sh/v3/covid-19/historical/all?lastdays=120")
-      .then((res) => res.json())
-      .then((data) => {
-        const chartData = buildChartData(data);
-        setData(chartData);
-      });
-  }, []);
+    const fetchData = async () => {
+      await fetch("https://disease.sh/v3/covid-19/historical/all?lastdays=120")
+        .then((res) => res.json())
+        .then((data) => {
+          let chartData = buildChartData(data, casesType);
+          setData(chartData);
+        });
+    };
+    fetchData();
+  }, [casesType]);
 
   return (
     <div className="lineGraph">
-      <Line
-        options={options}
-        data={{
-          datasets: [
-            {
-              data: data,
-            },
-          ],
-        }}
-      />
+      {data?.length > 0 && (
+        <Line
+          options={options}
+          data={{
+            datasets: [
+              {
+                backgroundColor: "rgba(204, 16, 52, 0.5)",
+                borderColor: "#CC1034",
+                data: data,
+              },
+            ],
+          }}
+        />
+      )}
     </div>
   );
 }
