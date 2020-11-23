@@ -11,16 +11,16 @@ import InfoBox from "./components/InfoBox";
 import Map from "./components/Map";
 import Table from "./components/Table";
 import LineGraph from "./components/LineGraph";
-import { sortData } from './util'
-import 'leaflet/dist/leaflet.css'
+import { sortData } from "./util";
+import "leaflet/dist/leaflet.css";
 
 function App() {
   const [countries, setCountries] = useState([]);
   const [country, setCountry] = useState(["worldwide"]);
   const [countryInfo, setCountryInfo] = useState({});
   const [tableData, setTableData] = useState([]);
-  const [mapCenter, setMapCenter] = useState({ lat: 34.80746, lng: -40.4796});
-  const [mapZoom, setMapZoom] = useState(3)
+  const [mapCenter, setMapCenter] = useState({ lat: 34.80746, lng: -40.4796 });
+  const [mapZoom, setMapZoom] = useState(3);
 
   useEffect(() => {
     fetch("https://disease.sh/v3/covid-19/all")
@@ -41,7 +41,7 @@ function App() {
           }));
 
           const sortedData = sortData(data);
-          setTableData(sortedData)
+          setTableData(sortedData);
           setCountries(countries);
         });
     };
@@ -50,7 +50,7 @@ function App() {
 
   const onCountryChange = async (e) => {
     const countryCode = e.target.value;
-    setCountry(countryCode);
+    // setCountry(countryCode);
 
     const url =
       countryCode === "worldwide"
@@ -63,6 +63,11 @@ function App() {
       .then((data) => {
         setCountry(countryCode);
         setCountryInfo(data);
+
+        //re-center the long and lat of the map onchange of country
+        setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+        // console.log("lat and long:", mapCenter)
+        setMapZoom(4);
       });
   };
 
@@ -104,10 +109,7 @@ function App() {
           />
         </div>
 
-        <Map
-        center={mapCenter}
-        zoom={mapZoom}
-        />
+        <Map center={mapCenter} zoom={mapZoom} />
       </div>
       <Card className="app__right">
         <CardContent>
