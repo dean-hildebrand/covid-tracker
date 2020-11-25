@@ -13,10 +13,11 @@ import Table from "./components/Table";
 import LineGraph from "./components/LineGraph";
 import { sortData, prettyPrintStat } from "./util";
 import "leaflet/dist/leaflet.css";
+import numeral from "numeral"
 
 function App() {
   const [countries, setCountries] = useState([]);
-  const [country, setCountry] = useState(["worldwide"]);
+  const [country, setInputCountry] = useState("worldwide");
   const [countryInfo, setCountryInfo] = useState({});
   const [tableData, setTableData] = useState([]);
   const [mapCenter, setMapCenter] = useState({ lat: 34.80746, lng: -40.4796 });
@@ -42,7 +43,7 @@ function App() {
             value: country.countryInfo.iso2,
           }));
 
-          const sortedData = sortData(data);
+          let sortedData = sortData(data);
           setTableData(sortedData);
           setCountries(countries);
           setMapCountries(data);
@@ -63,12 +64,11 @@ function App() {
     await fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        setCountry(countryCode);
+        setInputCountry(countryCode)
         setCountryInfo(data);
 
         //re-center the long and lat of the map onchange of country
         setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
-        console.log("lat and long:", mapCenter);
         setMapZoom(4);
       });
   };
@@ -98,14 +98,14 @@ function App() {
             active={casesType === "cases"}
             onClick={(e) => setCasesType("cases")}
             title="Coronavirus Cases"
-            total={prettyPrintStat(countryInfo.cases)}
+            total={numeral(countryInfo.cases).format("0.0a")}
             cases={prettyPrintStat(countryInfo.todayCases)}
           />
           <InfoBox
             active={casesType === "recovered"}
             onClick={(e) => setCasesType("recovered")}
             title="Recovered"
-            total={prettyPrintStat(countryInfo.recovered)}
+            total={numeral(countryInfo.recovered).format("0.0a")}
             cases={prettyPrintStat(countryInfo.todayRecovered)}
           />
 
@@ -114,7 +114,7 @@ function App() {
             active={casesType === "deaths"}
             onClick={(e) => setCasesType("deaths")}
             title="Deaths"
-            total={prettyPrintStat(countryInfo.deaths)}
+            total={numeral(countryInfo.deaths).format("0.0a")}
             cases={prettyPrintStat(countryInfo.todayDeaths)}
           />
         </div>
