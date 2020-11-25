@@ -41,6 +41,8 @@ export const sortData = (data) => {
   return sortedData;
 };
 
+
+
 //Draw circles on map and display size based on cases
 export const showDataOnMap = (data, casesType = "cases") =>
   data.map((country) => (
